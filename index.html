@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hopf Viewer — Stereographic & Softmax Coordinates</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="ui">
+    <h1>Hopf Viewer</h1>
+    <p class="sub">S³ → (stereographic R³) or → (softmax Δ³ ⊂ R³)</p>
+    <div class="row">
+      <label>Projection</label>
+      <select id="projection">
+        <option value="stereo">Stereographic</option>
+        <option value="softmax">Softmax (Δ³ via tetrahedron)</option>
+      </select>
+    </div>
+    <div class="row" id="softmaxRow">
+      <label>α (softmax temperature)</label>
+      <input type="range" id="alpha" min="0" max="6" value="2" step="0.1" />
+      <span id="alphaVal">2.0</span>
+    </div>
+    <div class="row">
+      <label>Latitude rings</label>
+      <input type="range" id="latRings" min="1" max="12" value="5" step="1" />
+      <span id="latRingsVal">5</span>
+    </div>
+    <div class="row">
+      <label>Longitudes per ring</label>
+      <input type="range" id="longitudes" min="1" max="24" value="6" step="1" />
+      <span id="longitudesVal">6</span>
+    </div>
+    <div class="row">
+      <label>Segments per fiber</label>
+      <input type="range" id="segments" min="64" max="800" value="300" step="1" />
+      <span id="segmentsVal">300</span>
+    </div>
+    <div class="row">
+      <label>Line width</label>
+      <input type="range" id="lineWidth" min="1" max="5" value="2" step="1" />
+      <span id="lineWidthVal">2</span>
+    </div>
+    <div class="row checkbox">
+      <input type="checkbox" id="showTetra" checked />
+      <label for="showTetra">Show tetrahedron (softmax)</label>
+    </div>
+    <div class="row">
+      <button id="regen">Regenerate fibers</button>
+      <button id="resetView">Reset view</button>
+    </div>
+    <div class="row group">
+      <div class="s2panel-wrap">
+        <canvas id="s2panel" width="288" height="288"></canvas>
+        <div class="s2panel-label">S² base panel (orthographic). Click inside the circle to add a fiber.</div>
+        <div class="row mini">
+          <label>Hemisphere</label>
+          <select id="hemi">
+            <option value="north">North (z≥0)</option>
+            <option value="south">South (z≤0)</option>
+          </select>
+        </div>
+        <div class="row mini checkbox">
+          <input type="checkbox" id="showGrid" checked />
+          <label for="showGrid">Show grid fibers</label>
+        </div>
+        <div class="row mini checkbox">
+          <input type="checkbox" id="showCustom" checked />
+          <label for="showCustom">Show custom fibers</label>
+        </div>
+        <div class="row mini">
+          <button id="clearCustom">Clear custom fibers</button>
+          <button id="removeLast">Remove last custom</button>
+        </div>
+      </div>
+    </div>
+    <div class="hint">
+      Drag to rotate • Wheel to zoom • Click “Regenerate” after changing counts
+    </div>
+    <details>
+      <summary>What am I seeing?</summary>
+      <p>
+        The Hopf fibration S³ → S² has circle fibers. We parametrize each fiber by an angle θ and
+        construct S³ points (x₁,x₂,x₃,x₄) from complex pairs (z₁,z₂). Two projections:
+      </p>
+      <ul>
+        <li><b>Stereographic:</b> (x₁,x₂,x₃,x₄) ↦ (x₁,x₂,x₃)/(1 - x₄) ∈ R³.</li>
+        <li><b>Softmax:</b> v ↦ softmax_α(v) ∈ Δ³ and then mapped to a 3D tetrahedron via barycentric coords.</li>
+      </ul>
+      <p>
+        Any two distinct Hopf fibers link once. Try rotating to see the linking.
+      </p>
+    </details>
+  </div>
+  <canvas id="cnv"></canvas>
+  <script src="hopf.js"></script>
+</body>
+</html>
